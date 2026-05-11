@@ -80,20 +80,20 @@ export function Portfolio() {
         </div>
 
         {/* Top bar */}
-        <div className="pointer-events-none absolute left-0 right-0 top-0 z-30 flex items-center justify-between px-6 py-5 text-xs font-mono uppercase tracking-[0.2em] text-foreground/60">
-          <span>Alexandru C.A · portfolio</span>
-          <span className="text-amber-glow">SCENE {Math.min(SCENES, Math.floor(progress * (SCENES - 1)) + 1)} / {SCENES}</span>
+        <div className="pointer-events-none absolute left-0 right-0 top-0 z-30 flex items-center justify-between px-4 py-4 text-[10px] font-mono uppercase tracking-[0.2em] text-foreground/60 sm:px-6 sm:py-5 sm:text-xs">
+          <span className="truncate pr-2">Alexandru C.A</span>
+          <span className="shrink-0 text-amber-glow">SCENE {Math.min(SCENES, Math.floor(progress * (SCENES - 1)) + 1)} / {SCENES}</span>
           <span className="hidden md:inline">scroll · explore the cave</span>
         </div>
 
         {/* Progress rail */}
-        <div className="pointer-events-none absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 gap-2">
+        <div className="pointer-events-none absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 gap-1.5 sm:bottom-6 sm:gap-2">
           {Array.from({ length: SCENES }).map((_, i) => {
             const active = sceneOpacity(progress, i) > 0.4;
             return (
               <span
                 key={i}
-                className="h-1 w-10 rounded-full transition-all"
+                className="h-0.5 w-7 rounded-full transition-all sm:h-1 sm:w-10"
                 style={{
                   background: active ? "var(--amber-glow)" : "oklch(0.3 0.02 60 / 0.5)",
                   boxShadow: active ? "0 0 12px var(--amber-glow)" : "none",

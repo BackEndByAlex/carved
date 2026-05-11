@@ -67,8 +67,9 @@
 .dark { color-scheme: dark; }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html, body { background-color: var(--color-background); color: var(--color-foreground); }
+  * { border-color: var(--color-border); scrollbar-width: none; }
+  *::-webkit-scrollbar { display: none; }
+  html, body { background-color: var(--color-background); color: var(--color-foreground); overflow-x: hidden; }
   body {
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     overscroll-behavior: none;

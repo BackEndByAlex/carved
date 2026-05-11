@@ -1,4 +1,4 @@
-backendbyalex.se {
+backendbyalex.se, www.backendbyalex.se {
     root * /var/www/carved
     file_server
     try_files {path} /index.html

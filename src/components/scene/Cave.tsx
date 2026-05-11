@@ -135,7 +135,7 @@ export function Dust() {
     const N = 600;
     const arr = new Float32Array(N * 3);
     for (let i = 0; i < N; i++) {
-      arr[i * 3]     = (rand() - 0.5) * 80;
+      arr[i * 3] = (rand() - 0.5) * 80;
       arr[i * 3 + 1] = (rand() - 0.5) * 30;
       arr[i * 3 + 2] = (rand() - 0.5) * 200 - 50;
     }

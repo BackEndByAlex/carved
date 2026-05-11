@@ -29,13 +29,13 @@ Scenes in order: Hero → About → Skills → Projects → CV/Contact → AI Jo
 
 ### Component responsibilities
 
-| File | Role |
-|---|---|
-| `Portfolio.tsx` | Lenis smooth scroll + GSAP ScrollTrigger pin. Owns `progress` state, renders `Experience` + all overlays |
-| `Experience.tsx` | R3F `<Canvas>` with `CameraRig`, cave geometry, stations, and post-processing |
-| `scene/Cave.tsx` | Procedural cave tunnel geometry, circuit traces, dust particles |
+| File                 | Role                                                                                                      |
+| -------------------- | --------------------------------------------------------------------------------------------------------- |
+| `Portfolio.tsx`      | Lenis smooth scroll + GSAP ScrollTrigger pin. Owns `progress` state, renders `Experience` + all overlays  |
+| `Experience.tsx`     | R3F `<Canvas>` with `CameraRig`, cave geometry, stations, and post-processing                             |
+| `scene/Cave.tsx`     | Procedural cave tunnel geometry, circuit traces, dust particles                                           |
 | `scene/Stations.tsx` | Six station meshes (`HeroPortal`, `StoneTerminal`, `SkillPillars`, `ProjectSlabs`, `Monolith`, `AINodes`) |
-| `Overlays.tsx` | Pure HTML/Tailwind overlays — one exported component per scene, all receiving `progress` prop |
+| `Overlays.tsx`       | Pure HTML/Tailwind overlays — one exported component per scene, all receiving `progress` prop             |
 
 ### Adding or editing a scene
 

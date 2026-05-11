@@ -96,10 +96,13 @@ export function Portfolio() {
           return (
             <div className="pointer-events-none absolute left-0 right-0 top-0 z-30 flex items-center justify-between px-4 py-4 text-[10px] font-mono uppercase tracking-[0.2em] text-foreground/60 sm:px-6 sm:py-5 sm:text-xs">
               <span className="truncate pr-2">Alexandru C.A</span>
-              {isDevScene
-                ? <span className="shrink-0 text-cyan-glow">// DEV</span>
-                : <span className="shrink-0 text-amber-glow">SCENE {currentScene + 1} / {SCENES - 1}</span>
-              }
+              {isDevScene ? (
+                <span className="shrink-0 text-cyan-glow">// DEV</span>
+              ) : (
+                <span className="shrink-0 text-amber-glow">
+                  SCENE {currentScene + 1} / {SCENES - 1}
+                </span>
+              )}
               <span className="hidden md:inline">scroll · explore the cave</span>
             </div>
           );
@@ -142,8 +145,13 @@ export function Portfolio() {
                             width: hovered ? "2.8rem" : active ? "2.2rem" : "1.6rem",
                             height: hovered || active ? "4px" : "2px",
                             display: "block",
-                            background: active || hovered ? "var(--amber-glow)" : "oklch(0.3 0.02 60 / 0.5)",
-                            boxShadow: active ? "0 0 12px var(--amber-glow)" : hovered ? "0 0 8px var(--amber-glow)" : "none",
+                            background:
+                              active || hovered ? "var(--amber-glow)" : "oklch(0.3 0.02 60 / 0.5)",
+                            boxShadow: active
+                              ? "0 0 12px var(--amber-glow)"
+                              : hovered
+                                ? "0 0 8px var(--amber-glow)"
+                                : "none",
                           }}
                         />
                       </button>
@@ -166,10 +174,12 @@ export function Portfolio() {
                     onMouseLeave={() => setHoveredScene(null)}
                     className="rounded border px-3 py-2 font-mono text-[9px] uppercase tracking-widest transition-all duration-200 sm:text-[10px]"
                     style={{
-                      borderColor: devActive || devHovered ? "var(--cyan-glow)" : "oklch(0.3 0.02 60 / 0.4)",
+                      borderColor:
+                        devActive || devHovered ? "var(--cyan-glow)" : "oklch(0.3 0.02 60 / 0.4)",
                       color: devActive || devHovered ? "var(--cyan-glow)" : "oklch(0.45 0.02 70)",
                       boxShadow: devActive ? "0 0 10px oklch(0.82 0.14 200 / 0.5)" : "none",
-                      background: devActive || devHovered ? "oklch(0.82 0.14 200 / 0.08)" : "transparent",
+                      background:
+                        devActive || devHovered ? "oklch(0.82 0.14 200 / 0.08)" : "transparent",
                     }}
                   >
                     // dev

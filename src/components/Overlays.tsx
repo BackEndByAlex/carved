@@ -153,7 +153,7 @@ export function SkillsOverlay({ progress }: { progress: number }) {
 // ─────── Projects ───────
 export function ProjectsOverlay({ progress }: { progress: number }) {
   return (
-    <div className="scene-overlay items-center px-4 py-14 sm:px-6 sm:py-0" id="projects">
+    <div className="scene-overlay items-center px-4 py-14 sm:px-6 sm:py-0">
       <div className="mx-auto w-full max-w-6xl" style={withFade(progress, 3)}>
         <div className="mb-5 text-center sm:mb-8">
           <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-amber-glow sm:text-xs">// 04 · projects</p>
@@ -189,7 +189,7 @@ export function ProjectsOverlay({ progress }: { progress: number }) {
 // ─────── CV / Contact ───────
 export function CVOverlay({ progress }: { progress: number }) {
   return (
-    <div className="scene-overlay items-center px-4 py-14 sm:px-6 sm:py-0" id="cv">
+    <div className="scene-overlay items-center px-4 py-14 sm:px-6 sm:py-0">
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-5 md:grid-cols-2 md:gap-8" style={withFade(progress, 4)}>
         <div className="rounded-lg border border-amber-glow/40 bg-background/75 p-4 backdrop-blur sm:p-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-amber-glow sm:text-xs">// education</p>

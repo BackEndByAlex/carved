@@ -16,19 +16,22 @@ const PROJECTS = [
     name: "salaryscope-api",
     desc: "GraphQL API serving 137k+ salary records. Apollo Server, Prisma, PostgreSQL, Elasticsearch, OAuth 2.0 PKCE, JWT — a school project that became my biggest API implementation.",
     tags: ["GraphQL", "Prisma", "Elasticsearch", "OAuth PKCE"],
-    url: "https://github.com/BackEndByAlex/salaryscope-api",
+    github: "https://github.com/BackEndByAlex/salaryscope-api",
+    live: "https://backendbyalex.nu/graphql",
   },
   {
     name: "salaryscope-wt",
     desc: "Salary insights dashboard consuming the GraphQL API. Interactive globe with MapLibre, Apollo Client, filters across 137k data points.",
     tags: ["React", "Apollo Client", "MapLibre", "Vite"],
-    url: "https://github.com/BackEndByAlex/salaryscope-wt",
+    github: "https://github.com/BackEndByAlex/salaryscope-wt",
+    live: "https://backendbyalex.nu",
   },
   {
     name: "token-auth",
     desc: "Standalone JWT auth service — refresh token rotation, role-based access control, secure HttpOnly cookies. A school project for understanding how JWT really works under the hood.",
     tags: ["Node", "JWT", "RBAC", "Security"],
-    url: "https://github.com/BackEndByAlex/token-auth",
+    github: "https://github.com/BackEndByAlex/token-auth",
+    live: null,
   },
 ];
 
@@ -212,17 +215,11 @@ export function ProjectsOverlay({ progress }: { progress: number }) {
         </div>
         <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
           {PROJECTS.map((p) => (
-            <a
+            <div
               key={p.name}
-              href={p.url}
-              target="_blank"
-              rel="noreferrer"
-              className="group flex flex-col rounded-lg border border-cyan-glow/30 bg-background/75 p-4 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-glow sm:p-5"
+              className="flex flex-col rounded-lg border border-cyan-glow/30 bg-background/75 p-4 backdrop-blur sm:p-5"
             >
-              <div className="flex items-center justify-between">
-                <span className="font-display text-lg sm:text-xl">{p.name}</span>
-                <ExternalLink className="h-4 w-4 text-cyan-glow opacity-60 group-hover:opacity-100" />
-              </div>
+              <span className="font-display text-lg sm:text-xl">{p.name}</span>
               <p className="mt-2 text-xs text-foreground/70 sm:text-sm">{p.desc}</p>
               <div className="mt-auto flex flex-wrap gap-1 pt-3">
                 {p.tags.map((t) => (
@@ -234,7 +231,27 @@ export function ProjectsOverlay({ progress }: { progress: number }) {
                   </span>
                 ))}
               </div>
-            </a>
+              <div className="mt-3 flex gap-2">
+                <a
+                  href={p.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded border border-border bg-background/60 px-3 py-1.5 text-[11px] text-foreground/70 transition hover:border-amber-glow hover:text-amber-glow"
+                >
+                  <Github className="h-3 w-3" /> GitHub
+                </a>
+                {p.live && (
+                  <a
+                    href={p.live}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded border border-cyan-glow/40 bg-background/60 px-3 py-1.5 text-[11px] text-cyan-glow transition hover:border-cyan-glow"
+                  >
+                    <ExternalLink className="h-3 w-3" /> Live
+                  </a>
+                )}
+              </div>
+            </div>
           ))}
         </div>
       </div>

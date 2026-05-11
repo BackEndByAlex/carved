@@ -204,6 +204,48 @@ export function Monolith({ position }: { position: [number, number, number] }) {
   );
 }
 
+// ───────── Scene 7: Blueprint tablets ─────────
+export function BlueprintStation({ position }: { position: [number, number, number] }) {
+  const tablets = useRef<THREE.Mesh[]>([]);
+  useFrame((s) => {
+    tablets.current.forEach((m, i) => {
+      if (!m) return;
+      m.rotation.y = Math.sin(s.clock.elapsedTime * 0.25 + i * 1.1) * 0.12;
+      m.position.y = (i - 1) * 2.2 + Math.sin(s.clock.elapsedTime * 0.5 + i) * 0.08;
+    });
+  });
+  return (
+    <group position={position}>
+      {[-4, 0, 4].map((x, i) => (
+        <group key={i} position={[x, (i - 1) * 2.2, -6]}>
+          <mesh
+            ref={(el) => { if (el) tablets.current[i] = el; }}
+            castShadow
+          >
+            <boxGeometry args={[2.6, 1.6, 0.12]} />
+            <meshStandardMaterial color="#1e1810" roughness={0.9} />
+          </mesh>
+          {/* circuit grid lines */}
+          {[-0.6, 0, 0.6].map((lx) => (
+            <mesh key={`h${lx}`} position={[lx, 0, 0.07]}>
+              <boxGeometry args={[0.03, 1.2, 0.01]} />
+              <meshStandardMaterial color={i % 2 === 0 ? AMBER : CYAN} emissive={i % 2 === 0 ? AMBER : CYAN} emissiveIntensity={3} toneMapped={false} />
+            </mesh>
+          ))}
+          {[-0.4, 0.4].map((ly) => (
+            <mesh key={`v${ly}`} position={[0, ly, 0.07]}>
+              <boxGeometry args={[2.0, 0.03, 0.01]} />
+              <meshStandardMaterial color={i % 2 === 0 ? CYAN : AMBER} emissive={i % 2 === 0 ? CYAN : AMBER} emissiveIntensity={3} toneMapped={false} />
+            </mesh>
+          ))}
+          <pointLight color={i % 2 === 0 ? AMBER : CYAN} intensity={1.8} distance={5} position={[0, 0, 1]} />
+        </group>
+      ))}
+      <pointLight position={[0, 0, -4]} color={CYAN} intensity={2} distance={14} />
+    </group>
+  );
+}
+
 // ───────── Scene 6: AI nodes ─────────
 export function AINodes({ position }: { position: [number, number, number] }) {
   const nodes = useRef<THREE.Mesh[]>([]);

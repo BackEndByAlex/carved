@@ -49,7 +49,7 @@ const AI_TOOLS = [
 ] as const;
 
 // ─────── Hero ───────
-export function HeroOverlay({ progress }: { progress: number }) {
+export function HeroOverlay({ progress, onScrollToProjects }: { progress: number; onScrollToProjects: () => void }) {
   return (
     <div className="scene-overlay items-center justify-center px-4 text-center sm:px-6">
       <div className="max-w-2xl" style={withFade(progress, 0)}>
@@ -68,12 +68,12 @@ export function HeroOverlay({ progress }: { progress: number }) {
           >
             <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Download CV
           </a>
-          <a
-            href="#projects"
+          <button
+            onClick={onScrollToProjects}
             className="inline-flex items-center gap-2 rounded-md border border-foreground/20 bg-background/40 px-4 py-2.5 text-xs font-medium text-foreground/60 backdrop-blur transition hover:border-cyan-glow/60 hover:text-cyan-glow hover:bg-background/60 sm:px-5 sm:py-3 sm:text-sm"
           >
             See my work <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          </a>
+          </button>
         </div>
         <div className="mt-10 flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-foreground/50 sm:mt-16 sm:text-xs">
           <ArrowDown className="h-3 w-3 animate-bounce" /> scroll to descend
@@ -289,6 +289,77 @@ export function AIOverlay({ progress }: { progress: number }) {
                 </span>
               </div>
               <p className="mt-1.5 text-xs text-foreground/75 sm:mt-2 sm:text-sm">{tool.role}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-foreground/40 sm:mt-8 sm:text-xs">
+          keep descending · one more chamber below
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─────── Behind the Build ───────
+const BUILD_STACK = [
+  {
+    label: "Three.js · R3F",
+    tone: "amber" as const,
+    detail: "The 3D cave is built with Three.js via React Three Fiber. Instanced meshes keep rock geometry cheap — 280 icosahedrons rendered as one draw call using a seeded PRNG (mulberry32) for deterministic placement.",
+  },
+  {
+    label: "GSAP · Lenis",
+    tone: "cyan" as const,
+    detail: "Lenis drives smooth-wheel scrolling. GSAP ScrollTrigger pins the canvas and writes raw scroll progress into a plain mutable ref — no React state — so Three.js reads it each frame without triggering re-renders.",
+  },
+  {
+    label: "CatmullRom Spline",
+    tone: "amber" as const,
+    detail: "Six camera waypoints are threaded through a CatmullRomCurve3 spline. Progress 0→1 maps to a smooth flight through the cave. A second spline handles lookAt targets independently for natural camera movement.",
+  },
+  {
+    label: "React 19 · Vite · TS",
+    tone: "cyan" as const,
+    detail: "Plain SPA — no SSR, no server runtime. TanStack Router handles the single route. Tailwind v4 with custom CSS properties for the amber/cyan brand colours. PostProcessing adds Bloom and Vignette over the canvas.",
+  },
+  {
+    label: "Caddy · VPS",
+    tone: "amber" as const,
+    detail: "Deployed to a VPS at backendbyalex.se. Caddy serves the dist/ folder with gzip, security headers, and TLS automatically.",
+  },
+  {
+    label: "Snap-to-scene",
+    tone: "cyan" as const,
+    detail: "After 500ms of scroll idle, a timeout fires and lerps the scroll position to the nearest scene boundary. This gives the feel of a snapping carousel while still allowing free intermediate scrolling.",
+  },
+];
+
+export function BehindBuildOverlay({ progress }: { progress: number }) {
+  return (
+    <div className="scene-overlay items-center px-4 py-14 sm:px-6 sm:py-0">
+      <div className="mx-auto w-full max-w-6xl" style={withFade(progress, 6)}>
+        <div className="mb-5 text-center sm:mb-8">
+          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-amber-glow sm:text-xs">// 07 · behind the build</p>
+          <h2 className="mt-2 font-display text-3xl font-semibold sm:mt-3 md:text-5xl">How this cave was carved.</h2>
+          <p className="mx-auto mt-2 max-w-2xl text-xs text-foreground/65 sm:mt-3 sm:text-sm">
+            Every technical decision that went into making this site.
+          </p>
+        </div>
+        <ul className="grid grid-cols-1 gap-2 sm:gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {BUILD_STACK.map((item, i) => (
+            <li
+              key={item.label}
+              className={`rounded-lg border bg-background/75 p-4 backdrop-blur sm:p-5 ${
+                item.tone === "amber" ? "border-amber-glow/40" : "border-cyan-glow/40"
+              }`}
+            >
+              <div className="flex items-baseline justify-between gap-2">
+                <span className={`font-mono text-[10px] sm:text-xs ${item.tone === "amber" ? "text-amber-glow" : "text-cyan-glow"}`}>
+                  0{i + 1}
+                </span>
+              </div>
+              <p className="mt-1 font-display text-base sm:text-lg">{item.label}</p>
+              <p className="mt-1.5 text-[11px] leading-relaxed text-foreground/65 sm:text-xs">{item.detail}</p>
             </li>
           ))}
         </ul>

@@ -10,6 +10,7 @@ import {
   ProjectSlabs,
   Monolith,
   AINodes,
+  BlueprintStation,
 } from "./scene/Stations";
 import { CAMERA_CURVE, LOOK_CURVE, STATION_CENTERS } from "./scene/path";
 import { progressRef } from "./scrollProgress";
@@ -65,6 +66,7 @@ export default function Experience() {
         <ProjectSlabs position={STATION_CENTERS[3]} />
         <Monolith position={STATION_CENTERS[4]} />
         <AINodes position={STATION_CENTERS[5]} />
+        <BlueprintStation position={STATION_CENTERS[6]} />
 
         <CameraRig />
 

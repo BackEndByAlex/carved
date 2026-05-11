@@ -1,0 +1,24 @@
+backendbyalex.se {
+    root * /var/www/carved
+    file_server
+    try_files {path} /index.html
+    encode gzip
+
+    header {
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        Cache-Control "public, max-age=31536000, immutable"
+    }
+
+    @html {
+        path *.html
+    }
+    header @html Cache-Control "no-cache"
+
+    @assets {
+        path /assets/*
+    }
+    header @assets Cache-Control "public, max-age=31536000, immutable"
+}

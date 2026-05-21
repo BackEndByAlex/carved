@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { Github, ExternalLink, ArrowRight, MapPin } from "lucide-react";
+import { useRef, useState } from "react";
+import { Github, ExternalLink, ArrowRight, MapPin, Linkedin } from "lucide-react";
+import emailjs from "@emailjs/browser";
 import { sceneOpacity } from "@/lib/scenes";
 import { WordsPullUp, AnimatedText } from "@/components/animations";
 
@@ -199,5 +200,139 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
         )}
       </div>
     </motion.div>
+  );
+}
+
+// ─── Contact ──────────────────────────────────────────────────
+
+type FormStatus = "idle" | "sending" | "sent" | "error";
+
+const inputClass =
+  "w-full rounded border border-primary/20 bg-[#101010] px-4 py-2.5 text-sm text-primary/80 placeholder:text-primary/20 focus:border-primary/40 focus:outline-none transition-colors";
+
+export function ContactOverlay({ progress }: { progress: number }) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<FormStatus>("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formRef.current) return;
+    setStatus("sending");
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY },
+      );
+      setStatus("sent");
+      formRef.current.reset();
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  return (
+    <div className="scene-overlay items-center px-4 py-14 sm:px-8 sm:py-0">
+      <div className="mx-auto w-full max-w-4xl" style={fadeStyle(progress, 3)}>
+        <div className="mb-8 text-center sm:mb-10">
+          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary/50 sm:text-xs">
+            // contact
+          </p>
+          <WordsPullUp
+            text="Let's work together."
+            className="mt-2 font-display text-3xl font-semibold sm:mt-3 md:text-5xl"
+          />
+          <p className="mt-3 text-sm text-gray-400">
+            Open to work opportunities, collaborations, and interesting projects.
+          </p>
+        </div>
+
+        <form ref={formRef} onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[10px] uppercase tracking-wider text-primary/40">
+              Name
+            </label>
+            <input
+              name="from_name"
+              type="text"
+              required
+              placeholder="Your name"
+              className={inputClass}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[10px] uppercase tracking-wider text-primary/40">
+              Email
+            </label>
+            <input
+              name="reply_to"
+              type="email"
+              required
+              placeholder="your@email.com"
+              className={inputClass}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5 md:col-span-2">
+            <label className="font-mono text-[10px] uppercase tracking-wider text-primary/40">
+              Message
+            </label>
+            <textarea
+              name="message"
+              required
+              rows={5}
+              placeholder="What are you working on?"
+              className={`${inputClass} resize-none`}
+            />
+          </div>
+
+          <div className="flex items-center justify-between md:col-span-2">
+            <div className="flex gap-2">
+              <a
+                href="https://github.com/BackEndByAlex"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 rounded border border-primary/20 bg-black/40 px-3 py-1.5 text-[11px] text-primary/60 transition hover:border-primary/60 hover:text-primary"
+              >
+                <Github className="h-3 w-3" /> GitHub
+              </a>
+              <a
+                href="https://linkedin.com/in/your-linkedin"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 rounded border border-primary/20 bg-black/40 px-3 py-1.5 text-[11px] text-primary/60 transition hover:border-primary/60 hover:text-primary"
+              >
+                <Linkedin className="h-3 w-3" /> LinkedIn
+              </a>
+            </div>
+
+            <button
+              type="submit"
+              disabled={status === "sending" || status === "sent"}
+              className="inline-flex items-center gap-3 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-black transition hover:bg-primary/90 disabled:opacity-60"
+            >
+              {status === "sent"
+                ? "Message sent!"
+                : status === "sending"
+                  ? "Sending..."
+                  : "Send message"}
+              {status !== "sent" && status !== "sending" && (
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black">
+                  <ArrowRight className="h-3.5 w-3.5 text-primary" />
+                </span>
+              )}
+            </button>
+          </div>
+
+          {status === "error" && (
+            <p className="font-mono text-xs text-red-400 md:col-span-2">
+              Something went wrong. Email me directly at alexsept100@gmail.com
+            </p>
+          )}
+        </form>
+      </div>
+    </div>
   );
 }

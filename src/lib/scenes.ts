@@ -1,4 +1,4 @@
-export const SCENES = 3;
+export const SCENES = 4;
 
 export function sceneOpacity(progress: number, scene: number): number {
   const seg = 1 / (SCENES - 1);

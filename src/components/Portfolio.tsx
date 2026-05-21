@@ -3,7 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { VideoBackground, type VideoBackgroundHandle } from "@/components/VideoBackground";
-import { HeroOverlay, AboutOverlay, ProjectsOverlay } from "@/components/Overlays";
+import { HeroOverlay, AboutOverlay, ProjectsOverlay, ContactOverlay } from "@/components/Overlays";
 import { SCENES } from "@/lib/scenes";
 
 const SNAP_DELAY = 500;
@@ -11,7 +11,7 @@ const SNAP_DELAY = 500;
 const NAV_ITEMS = [
   { label: "About", scene: 1 },
   { label: "Projects", scene: 2 },
-  { label: "Contact", scene: 2 },
+  { label: "Contact", scene: 3 },
 ];
 
 export function Portfolio() {
@@ -105,6 +105,7 @@ export function Portfolio() {
         <HeroOverlay progress={progress} onScrollToProjects={() => scrollToScene(2)} />
         <AboutOverlay progress={progress} />
         <ProjectsOverlay progress={progress} />
+        <ContactOverlay progress={progress} />
       </div>
     </div>
   );

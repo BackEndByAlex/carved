@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import { VideoBackground } from "@/components/VideoBackground";
+import { VideoBackground, type VideoBackgroundHandle } from "@/components/VideoBackground";
 import { HeroOverlay, AboutOverlay, ProjectsOverlay } from "@/components/Overlays";
 import { SCENES } from "@/lib/scenes";
 
@@ -17,7 +17,7 @@ const NAV_ITEMS = [
 export function Portfolio() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const bgRef = useRef<VideoBackgroundHandle | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
   const progressRef = useRef(0);
   const [progress, setProgress] = useState(0);
@@ -58,8 +58,7 @@ export function Portfolio() {
       onUpdate: (self) => {
         progressRef.current = self.progress;
         setProgress(self.progress);
-        const video = videoRef.current;
-        if (video?.duration) video.currentTime = self.progress * video.duration;
+        bgRef.current?.setProgress(self.progress);
         clearTimeout(snapTimeout);
         snapTimeout = setTimeout(snapToNearestScene, SNAP_DELAY);
       },
@@ -85,7 +84,7 @@ export function Portfolio() {
   return (
     <div ref={wrapperRef} className="relative w-full" style={{ height: `${SCENES * 100}vh` }}>
       <div ref={pinRef} className="relative h-screen w-full overflow-hidden bg-black">
-        <VideoBackground ref={videoRef} />
+        <VideoBackground ref={bgRef} />
 
         {/* Navbar */}
         <nav className="pointer-events-auto absolute left-1/2 top-0 z-30 flex -translate-x-1/2 items-center gap-6 rounded-b-2xl bg-black px-6 py-3 sm:gap-10 sm:px-10">

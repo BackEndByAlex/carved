@@ -37,8 +37,8 @@ export const VideoBackground = forwardRef<VideoBackgroundHandle>((_, ref) => {
     if (!canvas) return;
 
     const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
     };
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
@@ -48,8 +48,6 @@ export const VideoBackground = forwardRef<VideoBackgroundHandle>((_, ref) => {
     const draw = () => {
       const ctx = canvas.getContext("2d");
       if (ctx) {
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = "high";
         const idx = Math.min(
           Math.floor(progressRef.current * (FRAME_COUNT - 1)),
           FRAME_COUNT - 1,
@@ -87,7 +85,7 @@ export const VideoBackground = forwardRef<VideoBackgroundHandle>((_, ref) => {
 
   return (
     <div className="absolute inset-0">
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" style={{ imageRendering: "auto" }} />
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
       <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.7] mix-blend-overlay" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
     </div>

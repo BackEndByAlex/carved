@@ -2,27 +2,25 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import Experience from "@/components/Experience";
-import { progressRef, sceneOpacity, SCENES } from "@/components/scrollProgress";
-import {
-  HeroOverlay,
-  AboutOverlay,
-  SkillsOverlay,
-  ProjectsOverlay,
-  CVOverlay,
-  AIOverlay,
-  BehindBuildOverlay,
-} from "@/components/Overlays";
+import { VideoBackground } from "@/components/VideoBackground";
+import { HeroOverlay, AboutOverlay, ProjectsOverlay } from "@/components/Overlays";
+import { SCENES } from "@/lib/scenes";
 
-const SCROLL_PER_SCENE = 100; // vh per scene
-const SNAP_DELAY = 500; // ms idle before snapping
+const SNAP_DELAY = 500;
+
+const NAV_ITEMS = [
+  { label: "About", scene: 1 },
+  { label: "Projects", scene: 2 },
+  { label: "Contact", scene: 2 },
+];
 
 export function Portfolio() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
+  const progressRef = useRef(0);
   const [progress, setProgress] = useState(0);
-  const [hoveredScene, setHoveredScene] = useState<number | null>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -54,12 +52,14 @@ export function Portfolio() {
     const trigger = ScrollTrigger.create({
       trigger: wrapperRef.current!,
       start: "top top",
-      end: () => `+=${(SCENES - 1) * SCROLL_PER_SCENE}%`,
+      end: () => `+=${(SCENES - 1) * 100}%`,
       pin: pinRef.current!,
       scrub: 0.6,
       onUpdate: (self) => {
         progressRef.current = self.progress;
         setProgress(self.progress);
+        const video = videoRef.current;
+        if (video?.duration) video.currentTime = self.progress * video.duration;
         clearTimeout(snapTimeout);
         snapTimeout = setTimeout(snapToNearestScene, SNAP_DELAY);
       },
@@ -84,120 +84,28 @@ export function Portfolio() {
 
   return (
     <div ref={wrapperRef} className="relative w-full" style={{ height: `${SCENES * 100}vh` }}>
-      <div ref={pinRef} className="relative h-screen w-full overflow-hidden">
-        <div className="absolute inset-0">
-          <Experience />
-        </div>
+      <div ref={pinRef} className="relative h-screen w-full overflow-hidden bg-black">
+        <VideoBackground ref={videoRef} />
 
-        {/* Top bar */}
-        {(() => {
-          const currentScene = Math.round(progress * (SCENES - 1));
-          const isDevScene = currentScene === SCENES - 1;
-          return (
-            <div className="pointer-events-none absolute left-0 right-0 top-0 z-30 flex items-center justify-between px-4 py-4 text-[10px] font-mono uppercase tracking-[0.2em] text-foreground/60 sm:px-6 sm:py-5 sm:text-xs">
-              <span className="truncate pr-2">Alexandru C.A</span>
-              {isDevScene ? (
-                <span className="shrink-0 text-cyan-glow">// DEV</span>
-              ) : (
-                <span className="shrink-0 text-amber-glow">
-                  SCENE {currentScene + 1} / {SCENES - 1}
-                </span>
-              )}
-              <span className="hidden md:inline">scroll · explore the cave</span>
-            </div>
-          );
-        })()}
+        {/* Navbar */}
+        <nav className="pointer-events-auto absolute left-1/2 top-0 z-30 flex -translate-x-1/2 items-center gap-6 rounded-b-2xl bg-black px-6 py-3 sm:gap-10 sm:px-10">
+          {NAV_ITEMS.map(({ label, scene }) => (
+            <button
+              key={label}
+              onClick={() => scrollToScene(scene)}
+              className="font-mono text-[9px] uppercase tracking-[0.3em] transition-colors duration-150 sm:text-[10px]"
+              style={{ color: "rgba(225,224,204,0.7)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#E1E0CC")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(225,224,204,0.7)")}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
 
-        {/* Progress rail */}
-        {(() => {
-          const SCENE_NAMES = ["Hero", "About", "Skills", "Projects", "CV", "AI Journey"];
-          const currentScene = Math.round(progress * (SCENES - 1));
-          return (
-            <div className="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 sm:bottom-6 sm:gap-3">
-              {/* 6 main scene dots */}
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                {SCENE_NAMES.map((name, i) => {
-                  const active = sceneOpacity(progress, i) > 0.4;
-                  const hovered = hoveredScene === i;
-                  return (
-                    <div key={i} className="relative flex flex-col items-center">
-                      {/* hover label */}
-                      <span
-                        className="pointer-events-none absolute bottom-4 whitespace-nowrap font-mono text-[9px] uppercase tracking-widest transition-all duration-200 sm:bottom-5 sm:text-[10px]"
-                        style={{
-                          opacity: hovered ? 1 : 0,
-                          color: active ? "var(--amber-glow)" : "oklch(0.65 0.02 70)",
-                          transform: hovered ? "translateY(0)" : "translateY(4px)",
-                        }}
-                      >
-                        {name}
-                      </span>
-                      <button
-                        onClick={() => scrollToScene(i)}
-                        onMouseEnter={() => setHoveredScene(i)}
-                        onMouseLeave={() => setHoveredScene(null)}
-                        className="flex items-center justify-center px-1 py-3 transition-all duration-200"
-                        style={{ background: "transparent" }}
-                      >
-                        <span
-                          className="rounded-full transition-all duration-200"
-                          style={{
-                            width: hovered ? "2.8rem" : active ? "2.2rem" : "1.6rem",
-                            height: hovered || active ? "4px" : "2px",
-                            display: "block",
-                            background:
-                              active || hovered ? "var(--amber-glow)" : "oklch(0.3 0.02 60 / 0.5)",
-                            boxShadow: active
-                              ? "0 0 12px var(--amber-glow)"
-                              : hovered
-                                ? "0 0 8px var(--amber-glow)"
-                                : "none",
-                          }}
-                        />
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* divider */}
-              <span className="h-3 w-px bg-foreground/20" />
-
-              {/* DEV scene button */}
-              {(() => {
-                const devActive = currentScene === SCENES - 1;
-                const devHovered = hoveredScene === SCENES - 1;
-                return (
-                  <button
-                    onClick={() => scrollToScene(SCENES - 1)}
-                    onMouseEnter={() => setHoveredScene(SCENES - 1)}
-                    onMouseLeave={() => setHoveredScene(null)}
-                    className="rounded border px-3 py-2 font-mono text-[9px] uppercase tracking-widest transition-all duration-200 sm:text-[10px]"
-                    style={{
-                      borderColor:
-                        devActive || devHovered ? "var(--cyan-glow)" : "oklch(0.3 0.02 60 / 0.4)",
-                      color: devActive || devHovered ? "var(--cyan-glow)" : "oklch(0.45 0.02 70)",
-                      boxShadow: devActive ? "0 0 10px oklch(0.82 0.14 200 / 0.5)" : "none",
-                      background:
-                        devActive || devHovered ? "oklch(0.82 0.14 200 / 0.08)" : "transparent",
-                    }}
-                  >
-                    // dev
-                  </button>
-                );
-              })()}
-            </div>
-          );
-        })()}
-
-        {/* Scene overlays */}
-        <HeroOverlay progress={progress} onScrollToProjects={() => scrollToScene(3)} />
+        <HeroOverlay progress={progress} onScrollToProjects={() => scrollToScene(2)} />
         <AboutOverlay progress={progress} />
-        <SkillsOverlay progress={progress} />
         <ProjectsOverlay progress={progress} />
-        <CVOverlay progress={progress} />
-        <AIOverlay progress={progress} />
-        <BehindBuildOverlay progress={progress} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef, useImperativeHandle } from "react";
 
-const FRAME_COUNT = 300;
+const FRAME_COUNT = 240;
 const FRAME_PATH = (i: number) =>
   `/frames/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
 

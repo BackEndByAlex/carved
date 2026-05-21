@@ -91,7 +91,7 @@ export function AboutOverlay({ progress }: { progress: number }) {
         className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 md:grid-cols-2 md:gap-12"
         style={fadeStyle(progress, 1)}
       >
-        <div>
+        <div className="rounded-lg bg-black/50 p-5 backdrop-blur-sm sm:p-7">
           <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary/50 sm:text-xs">
             // about
           </p>
@@ -135,7 +135,7 @@ export function ProjectsOverlay({ progress }: { progress: number }) {
   return (
     <div className="scene-overlay items-center px-4 py-14 sm:px-8 sm:py-0">
       <div className="mx-auto w-full max-w-6xl" style={fadeStyle(progress, 2)}>
-        <div className="mb-6 text-center sm:mb-10">
+        <div className="mb-6 rounded-lg bg-black/50 px-6 py-4 text-center backdrop-blur-sm sm:mb-10">
           <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary/50 sm:text-xs">
             // projects
           </p>
@@ -244,7 +244,7 @@ export function ContactOverlay({ progress }: { progress: number }) {
   return (
     <div className="scene-overlay items-center px-4 py-14 sm:px-8 sm:py-0">
       <div className="mx-auto w-full max-w-4xl" style={fadeStyle(progress, 3)}>
-        <div className="mb-8 text-center sm:mb-10">
+        <div className="mb-8 rounded-lg bg-black/50 px-6 py-4 text-center backdrop-blur-sm sm:mb-10">
           <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary/50 sm:text-xs">
             // contact
           </p>

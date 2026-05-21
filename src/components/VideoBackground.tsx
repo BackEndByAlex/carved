@@ -87,7 +87,7 @@ export const VideoBackground = forwardRef<VideoBackgroundHandle>((_, ref) => {
     <div className="absolute inset-0">
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
       <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.7] mix-blend-overlay" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/75" />
     </div>
   );
 });

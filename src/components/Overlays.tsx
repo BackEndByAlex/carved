@@ -299,7 +299,7 @@ export function ContactOverlay({ progress }: { progress: number }) {
                 <Github className="h-3 w-3" /> GitHub
               </a>
               <a
-                href="https://linkedin.com/in/your-linkedin"
+                href="https://linkedin.com/in/alexandru-ca/"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 rounded border border-primary/20 bg-black/40 px-3 py-1.5 text-[11px] text-primary/60 transition hover:border-primary/60 hover:text-primary"

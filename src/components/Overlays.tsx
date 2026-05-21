@@ -218,16 +218,17 @@ export function ContactOverlay({ progress }: { progress: number }) {
     if (!formRef.current) return;
     setStatus("sending");
     const data = new FormData(formRef.current);
+    const payload: Record<string, unknown> = {
+      access_key: import.meta.env.VITE_WEB3FORMS_KEY,
+    };
+    for (const [key, value] of data.entries()) {
+      payload[key] = value;
+    }
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
-          name: data.get("from_name"),
-          email: data.get("reply_to"),
-          message: data.get("message"),
-        }),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         setStatus("sent");
@@ -294,6 +295,10 @@ export function ContactOverlay({ progress }: { progress: number }) {
               placeholder="What are you working on?"
               className={`${inputClass} resize-none`}
             />
+          </div>
+
+          <div className="md:col-span-2">
+            <div className="h-captcha" data-captcha="true" />
           </div>
 
           <div className="flex items-center justify-between md:col-span-2">

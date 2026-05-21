@@ -1,7 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Github, ExternalLink, ArrowRight, MapPin, Linkedin } from "lucide-react";
-import emailjs from "@emailjs/browser";
 import { sceneOpacity } from "@/lib/scenes";
 import { WordsPullUp, AnimatedText } from "@/components/animations";
 
@@ -218,15 +217,24 @@ export function ContactOverlay({ progress }: { progress: number }) {
     e.preventDefault();
     if (!formRef.current) return;
     setStatus("sending");
+    const data = new FormData(formRef.current);
     try {
-      await emailjs.sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        formRef.current,
-        { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY },
-      );
-      setStatus("sent");
-      formRef.current.reset();
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
+          name: data.get("from_name"),
+          email: data.get("reply_to"),
+          message: data.get("message"),
+        }),
+      });
+      if (res.ok) {
+        setStatus("sent");
+        formRef.current.reset();
+      } else {
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
     }

@@ -48,6 +48,8 @@ export const VideoBackground = forwardRef<VideoBackgroundHandle>((_, ref) => {
     const draw = () => {
       const ctx = canvas.getContext("2d");
       if (ctx) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
         const idx = Math.min(
           Math.floor(progressRef.current * (FRAME_COUNT - 1)),
           FRAME_COUNT - 1,
